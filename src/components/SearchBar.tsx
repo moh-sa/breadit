@@ -1,6 +1,5 @@
 "use client";
 
-import { Prisma, subbreadit } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import debounce from "lodash.debounce";
