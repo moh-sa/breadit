@@ -79,6 +79,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
           {isFetched && <CommandEmpty>No results found.</CommandEmpty>}
           {(queryResults?.length ?? 0) > 0 ? (
             <CommandGroup heading="Communities">
+              {/* @ts-ignore */}
               {queryResults?.map((subbreadit) => (
                 <CommandItem
                   onSelect={(e) => {
