@@ -2,13 +2,15 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider     = "postgresql"
   url          = env("DATABASE_URL")
   relationMode = "foreignKeys"
+  schemas      = ["account", "session", "user", "subbreadit", "subscription", "post", "comment", "vote", "comment_vote"]
 }
 
 model Account {
@@ -28,6 +30,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@schema("account")
 }
 
 model Session {
@@ -36,6 +39,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("session")
 }
 
 model User {
@@ -55,6 +60,8 @@ model User {
   CommentVote  CommentVote[]
   Vote         Vote[]
   Subscription Subscription[]
+
+  @@schema("user")
 }
 
 model Subbreadit {
@@ -69,6 +76,7 @@ model Subbreadit {
   subscripers Subscription[]
 
   @@index([name])
+  @@schema("subbreadit")
 }
 
 model Subscription {
@@ -78,6 +86,7 @@ model Subscription {
   subbreaditId String
 
   @@id([userId, subbreaditId])
+  @@schema("subscription")
 }
 
 model Post {
@@ -95,6 +104,8 @@ model Post {
 
   comments Comment[]
   votes    Vote[]
+
+  @@schema("post")
 }
 
 model Comment {
@@ -112,11 +123,15 @@ model Comment {
 
   votes     CommentVote[]
   commentId String?
+
+  @@schema("comment")
 }
 
 enum VoteType {
   UP
   DOWN
+
+  @@schema("vote")
 }
 
 model Vote {
@@ -127,6 +142,7 @@ model Vote {
   type   VoteType
 
   @@id([userId, postId])
+  @@schema("vote")
 }
 
 model CommentVote {
@@ -137,4 +153,5 @@ model CommentVote {
   type      VoteType
 
   @@id([userId, commentId])
+  @@schema("comment_vote")
 }
